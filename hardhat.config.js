@@ -43,9 +43,10 @@ module.exports = {
     },
     // Base Mainnet
     base: {
-      url: process.env.BASE_URL || "https://mainnet.base.org",
+      url: process.env.BASE_URL || "https://1rpc.io/base",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 8453
+      chainId: 8453,
+      timeout: 120000
     },
     // Base Sepolia Testnet
     baseSepolia: {

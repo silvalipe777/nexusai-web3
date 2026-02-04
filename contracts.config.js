@@ -12,9 +12,9 @@ const CONTRACT_ADDRESSES = {
     },
     // Base Mainnet
     base: {
-        ThreadSTRToken: "",
-        ThreadSTRAgents: "",
-        ThreadSTRStaking: ""
+        ThreadSTRToken: "0x96C55bebDe4aAcA1F6952ADe94eDc48319289d36",
+        ThreadSTRAgents: "0xF1078f6f5601AEbe9f8Bff2cc365EaB12309f44f",
+        ThreadSTRStaking: "0x3BC5daA8019bD3E665b7536969EFE0E987BA8aE4"
     },
     // Base Sepolia Testnet
     baseSepolia: {
