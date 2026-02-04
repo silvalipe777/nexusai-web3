@@ -1,5 +1,5 @@
 // ================================
-// NexusAI - Configuração dos Contratos
+// ThreadSTR - Configuração dos Contratos
 // ================================
 
 // Endereços dos contratos (atualizar após deploy)

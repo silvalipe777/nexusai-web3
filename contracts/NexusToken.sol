@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
  * @title NexusToken (NXS)
- * @dev Token ERC-20 para o ecossistema NexusAI
+ * @dev Token ERC-20 para o ecossistema ThreadSTR
  */
 contract NexusToken is ERC20, ERC20Burnable, Ownable {
 
@@ -18,7 +18,7 @@ contract NexusToken is ERC20, ERC20Burnable, Ownable {
     event TokensPurchased(address indexed buyer, uint256 amount, uint256 cost);
     event TokenPriceUpdated(uint256 newPrice);
 
-    constructor() ERC20("NexusAI Token", "NXS") Ownable(msg.sender) {
+    constructor() ERC20("ThreadSTR Token", "NXS") Ownable(msg.sender) {
         // Mint inicial para o deployer (10% do supply para liquidez)
         _mint(msg.sender, 100_000_000 * 10**18);
     }

@@ -9,7 +9,7 @@ import "./NexusToken.sol";
 
 /**
  * @title NexusAgents
- * @dev Contrato NFT ERC-721 para agentes de IA do NexusAI
+ * @dev Contrato NFT ERC-721 para agentes de IA do ThreadSTR
  */
 contract NexusAgents is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     uint256 private _tokenIdCounter;
@@ -48,7 +48,7 @@ contract NexusAgents is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     event AgentUnstaked(uint256 indexed tokenId, address indexed owner);
     event PriceUpdated(AgentTier tier, uint256 priceETH, uint256 priceNXS);
 
-    constructor(address _nexusToken) ERC721("NexusAI Agent", "NXSA") Ownable(msg.sender) {
+    constructor(address _nexusToken) ERC721("ThreadSTR Agent", "TSTRA") Ownable(msg.sender) {
         nexusToken = NexusToken(_nexusToken);
 
         // Definir preços iniciais em ETH (wei)

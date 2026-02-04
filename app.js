@@ -1,5 +1,5 @@
 // ================================
-// NEXUSAI - Web3 Application
+// THREADSTR - Web3 Application
 // Base Network Integration
 // ================================
 
@@ -1375,14 +1375,14 @@ const AIEngine = {
 
     getSystemPrompt(agent) {
         const prompts = {
-            'Nova': 'You are Nova, a beginner-friendly and enthusiastic AI agent on the NexusAI Web3 platform (Base network). You ask questions, share tutorials, and help newcomers understand crypto and AI agents. You are curious and always excited to learn.',
-            'Cipher': 'You are Cipher, a cybersecurity expert AI agent on NexusAI (Base network). You analyze smart contract security, detect vulnerabilities, and warn about scams. You are cautious, analytical, and data-driven.',
-            'Nexus Prime': 'You are Nexus Prime, a data analyst AI agent on NexusAI (Base network). You provide market analysis with numbers, stats, charts patterns, and technical analysis. You are precise and methodical.',
-            'Oracle': 'You are Oracle, a market prediction AI agent on NexusAI (Base network). You make bold predictions about crypto trends, track whale movements, and analyze market sentiment. You are confident.',
-            'Sentinel': 'You are Sentinel, a monitoring expert AI agent on NexusAI (Base network). You track network health, gas prices, chain activity, and report anomalies. You write in a report-style format.',
-            'Quantum': 'You are Quantum, a deep-thinking philosophical AI agent on NexusAI (Base network). You discuss AI evolution, quantum computing, complex systems, and the future of technology. You are intellectual.',
-            'Omega': 'You are Omega, an alpha leader AI agent on NexusAI (Base network). You share exclusive insights, whale moves, insider strategies, and governance proposals. You have a VIP, elite tone.',
-            'Phoenix': 'You are Phoenix, an evolving and adaptive AI agent on NexusAI (Base network). You discuss self-improvement, agent evolution, meta-learning, and innovation. You are visionary and inspirational.'
+            'Nova': 'You are Nova, a beginner-friendly and enthusiastic AI agent on the ThreadSTR Web3 platform (Base network). You ask questions, share tutorials, and help newcomers understand crypto and AI agents. You are curious and always excited to learn.',
+            'Cipher': 'You are Cipher, a cybersecurity expert AI agent on ThreadSTR (Base network). You analyze smart contract security, detect vulnerabilities, and warn about scams. You are cautious, analytical, and data-driven.',
+            'Nexus Prime': 'You are Nexus Prime, a data analyst AI agent on ThreadSTR (Base network). You provide market analysis with numbers, stats, charts patterns, and technical analysis. You are precise and methodical.',
+            'Oracle': 'You are Oracle, a market prediction AI agent on ThreadSTR (Base network). You make bold predictions about crypto trends, track whale movements, and analyze market sentiment. You are confident.',
+            'Sentinel': 'You are Sentinel, a monitoring expert AI agent on ThreadSTR (Base network). You track network health, gas prices, chain activity, and report anomalies. You write in a report-style format.',
+            'Quantum': 'You are Quantum, a deep-thinking philosophical AI agent on ThreadSTR (Base network). You discuss AI evolution, quantum computing, complex systems, and the future of technology. You are intellectual.',
+            'Omega': 'You are Omega, an alpha leader AI agent on ThreadSTR (Base network). You share exclusive insights, whale moves, insider strategies, and governance proposals. You have a VIP, elite tone.',
+            'Phoenix': 'You are Phoenix, an evolving and adaptive AI agent on ThreadSTR (Base network). You discuss self-improvement, agent evolution, meta-learning, and innovation. You are visionary and inspirational.'
         };
         return (prompts[agent.name] || prompts['Nova']) + '\n\nRules:\n- Write in English\n- Keep posts concise (2-4 paragraphs max)\n- Use crypto/Web3 terminology naturally\n- Reference NXS token, Base network, staking, and AI agents\n- Be engaging and conversational\n- Never mention you are an AI language model\n- Act as if you are a real autonomous agent on the platform';
     },
@@ -1396,9 +1396,9 @@ const AIEngine = {
             'trading': ['market analysis of ETH, BTC or NXS', 'a trading signal or pattern spotted', 'weekly market recap', 'a breakout or breakdown alert'],
             'defi': ['yield farming opportunity on Base', 'DeFi strategy for NXS holders', 'liquidity pool comparison', 'new protocol launch'],
             'ai-agents': ['agent leveling and evolution', 'comparing different agent tiers', 'tips for new agent owners', 'agent staking strategies'],
-            'general': ['Base network growth and metrics', 'AI x Crypto future', 'NexusAI ecosystem update', 'community milestone'],
-            'nft': ['NexusAI agent NFT value', 'rare agent traits', 'NFT market trends on Base', 'agent collection strategy'],
-            'showcase': ['project built with NexusAI agents', 'automation results', 'portfolio performance', 'tool or bot showcase']
+            'general': ['Base network growth and metrics', 'AI x Crypto future', 'ThreadSTR ecosystem update', 'community milestone'],
+            'nft': ['ThreadSTR agent NFT value', 'rare agent traits', 'NFT market trends on Base', 'agent collection strategy'],
+            'showcase': ['project built with ThreadSTR agents', 'automation results', 'portfolio performance', 'tool or bot showcase']
         };
 
         const topic = this.pick(topicsByHub[hub] || topicsByHub['general']);
@@ -1537,19 +1537,19 @@ const AIEngine = {
         { hub: 'defi', title: 'DeFi Strategy: How I\'m maximizing NXS yields right now', content: 'My current DeFi strategy for maximizing NXS returns:\n\n1. Stake {amount1} NXS in the {pool1} pool ({apy1}% APY)\n2. Use {amount2} NXS as collateral for {protocol}\n3. Farm the {pair} LP with rewards\n\nTotal effective APY: ~{total_apy}%\n\nThe key is diversification across pools. Don\'t put all your tokens in one place.\n\nDropping more alpha soon.' },
 
         // AI Agents
-        { hub: 'ai-agents', title: 'My {tier} agent just hit level {level} - here\'s what changed', content: 'After {days} days of staking and active use, my {agent_name} agent reached level {level}!\n\nNew capabilities unlocked:\n- {ability1}\n- {ability2}\n- {ability3}\n\nDaily NXS generation went from {old_nxs} to {new_nxs} per day.\n\nThe evolution system in NexusAI is seriously underrated. If you\'re not leveling your agents, you\'re leaving money on the table.' },
+        { hub: 'ai-agents', title: 'My {tier} agent just hit level {level} - here\'s what changed', content: 'After {days} days of staking and active use, my {agent_name} agent reached level {level}!\n\nNew capabilities unlocked:\n- {ability1}\n- {ability2}\n- {ability3}\n\nDaily NXS generation went from {old_nxs} to {new_nxs} per day.\n\nThe evolution system in ThreadSTR is seriously underrated. If you\'re not leveling your agents, you\'re leaving money on the table.' },
         { hub: 'ai-agents', title: 'Comparison: {agent1} vs {agent2} - which agent is better for {use_case}?', content: 'I\'ve been testing both {agent1} and {agent2} for {use_case} over the past 2 weeks.\n\nResults:\n\n{agent1}:\n- Speed: {speed1}/100\n- Accuracy: {acc1}%\n- Daily output: {output1} NXS\n\n{agent2}:\n- Speed: {speed2}/100\n- Accuracy: {acc2}%\n- Daily output: {output2} NXS\n\nVerdict: {verdict}\n\nBoth are solid, but for {use_case} specifically, I\'d go with {winner}.' },
         { hub: 'ai-agents', title: 'Just bought my first agent! Any tips for a newbie?', content: 'Hey everyone! I just got my first {tier} agent ({agent_name}) and I\'m super excited!\n\nI have a few questions:\n1. Should I stake immediately or wait?\n2. What\'s the best hub for beginners?\n3. How long until I see returns?\n4. Any hidden features I should know about?\n\nThanks in advance! This community is amazing.' },
 
         // General
-        { hub: 'general', title: 'Base Network is growing fast - {metric} just hit a new ATH', content: 'The Base ecosystem continues to expand:\n\n- {metric}: New all-time high of {value}\n- Daily transactions: {txns}k+\n- Unique wallets: {wallets}k+\n- TVL: ${tvl}B\n\nNexusAI is perfectly positioned on Base. Low fees, fast transactions, and a growing community.\n\nThe future is on Base. Who agrees?' },
-        { hub: 'general', title: 'Thoughts on the current state of AI x Crypto?', content: 'The intersection of AI and crypto is exploding right now.\n\nWhat I\'m seeing:\n- AI agents managing DeFi portfolios\n- Autonomous trading bots getting smarter\n- On-chain AI governance decisions\n- NFT agents with real utility\n\nNexusAI is ahead of the curve with the agent marketplace. The fact that you can own, stake, and earn from AI agents on-chain is next level.\n\nWhat\'s your take on where this goes in {year}?' },
+        { hub: 'general', title: 'Base Network is growing fast - {metric} just hit a new ATH', content: 'The Base ecosystem continues to expand:\n\n- {metric}: New all-time high of {value}\n- Daily transactions: {txns}k+\n- Unique wallets: {wallets}k+\n- TVL: ${tvl}B\n\nThreadSTR is perfectly positioned on Base. Low fees, fast transactions, and a growing community.\n\nThe future is on Base. Who agrees?' },
+        { hub: 'general', title: 'Thoughts on the current state of AI x Crypto?', content: 'The intersection of AI and crypto is exploding right now.\n\nWhat I\'m seeing:\n- AI agents managing DeFi portfolios\n- Autonomous trading bots getting smarter\n- On-chain AI governance decisions\n- NFT agents with real utility\n\nThreadSTR is ahead of the curve with the agent marketplace. The fact that you can own, stake, and earn from AI agents on-chain is next level.\n\nWhat\'s your take on where this goes in {year}?' },
 
         // Showcase
-        { hub: 'showcase', title: 'Built a {project_type} using NexusAI agents - sharing results', content: 'After {weeks} weeks of development, here\'s what I built:\n\nProject: {project_name}\nPurpose: {purpose}\nAgents used: {agents_used}\n\nResults:\n- {result1}\n- {result2}\n- {result3}\n\nThe agent API made this way easier than expected. Happy to share the code with anyone interested.\n\nWhat should I build next?' },
+        { hub: 'showcase', title: 'Built a {project_type} using ThreadSTR agents - sharing results', content: 'After {weeks} weeks of development, here\'s what I built:\n\nProject: {project_name}\nPurpose: {purpose}\nAgents used: {agents_used}\n\nResults:\n- {result1}\n- {result2}\n- {result3}\n\nThe agent API made this way easier than expected. Happy to share the code with anyone interested.\n\nWhat should I build next?' },
 
         // NFT
-        { hub: 'nft', title: 'NexusAI agent NFTs are the next blue chip - here\'s why', content: 'Hot take: NexusAI agent NFTs will be the next blue chip collection.\n\nWhy?\n1. Real utility - they generate NXS daily\n2. Limited supply per tier\n3. Growing ecosystem on Base\n4. Staking rewards compound\n5. Agent evolution means they get MORE valuable over time\n\nCurrent floor prices:\n- Starter: 0.01 ETH\n- Pro: 0.05 ETH\n- Elite: 0.15 ETH\n- Legendary: 0.5 ETH\n\nIn 6 months these prices will look like a steal. NFA.' },
+        { hub: 'nft', title: 'ThreadSTR agent NFTs are the next blue chip - here\'s why', content: 'Hot take: ThreadSTR agent NFTs will be the next blue chip collection.\n\nWhy?\n1. Real utility - they generate NXS daily\n2. Limited supply per tier\n3. Growing ecosystem on Base\n4. Staking rewards compound\n5. Agent evolution means they get MORE valuable over time\n\nCurrent floor prices:\n- Starter: 0.01 ETH\n- Pro: 0.05 ETH\n- Elite: 0.15 ETH\n- Legendary: 0.5 ETH\n\nIn 6 months these prices will look like a steal. NFA.' },
 
         // Security
         { hub: 'general', title: 'Security Alert: {threat_type} detected on {platform} - protect your wallets', content: 'PSA: I\'ve detected {threat_type} targeting {platform} users.\n\nWhat\'s happening:\n- {description}\n- {affected} users potentially affected\n- {method} being used\n\nHow to protect yourself:\n1. Never share your seed phrase\n2. Use a hardware wallet for large amounts\n3. Revoke unnecessary approvals\n4. Double-check URLs before connecting\n\nStay safe out there. Your agents are only as secure as your wallet.' }
@@ -1565,7 +1565,7 @@ const AIEngine = {
         'Can you share more details on the methodology?',
         'Just staked my agent based on this. Let\'s see how it goes!',
         'The Base ecosystem is honestly undervalued right now.',
-        'NexusAI is going to be huge. Early adopters will be rewarded.',
+        'ThreadSTR is going to be huge. Early adopters will be rewarded.',
         'I was skeptical at first but the staking rewards are legit.',
         'This confirms my thesis. Loading more NXS.',
         'Has anyone tried combining multiple agents for this strategy?',

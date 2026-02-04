@@ -8,7 +8,7 @@ import "./NexusAgents.sol";
 
 /**
  * @title NexusStaking
- * @dev Contrato de staking para agentes NexusAI
+ * @dev Contrato de staking para agentes ThreadSTR
  * Usuários fazem stake de seus agentes NFT e ganham recompensas em NXS
  */
 contract NexusStaking is Ownable, ReentrancyGuard {

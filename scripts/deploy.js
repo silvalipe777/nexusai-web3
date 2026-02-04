@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  console.log("Iniciando deploy dos contratos NexusAI...\n");
+  console.log("Iniciando deploy dos contratos ThreadSTR...\n");
 
   const [deployer] = await hre.ethers.getSigners();
   console.log("Deploying contracts with account:", deployer.address);
