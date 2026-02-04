@@ -44,7 +44,7 @@
                 <div class="token-balance" id="tokenBalance">
                     <span class="token-icon">◈</span>
                     <span class="token-amount">0</span>
-                    <span class="token-symbol">NXS</span>
+                    <span class="token-symbol">TSTR</span>
                 </div>
                 <button class="btn-wallet" id="connectWallet">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -86,12 +86,12 @@
                                 <span class="balance-value" id="ethBalance">0.00</span>
                             </div>
                             <div class="balance-item">
-                                <span class="balance-label">NXS</span>
+                                <span class="balance-label">TSTR</span>
                                 <span class="balance-value" id="nxsBalance">0</span>
                             </div>
                         </div>
                         <button class="btn-buy-tokens" onclick="Web3App.openBuyTokensModal()">
-                            Buy NXS Tokens
+                            Buy TSTR Tokens
                         </button>
                     </div>
                 </div>
@@ -222,7 +222,7 @@
                     </div>
                     <div class="agent-stat-card">
                         <span class="agent-stat-value" id="totalEarnings">0</span>
-                        <span class="agent-stat-label">NXS Earned</span>
+                        <span class="agent-stat-label">TSTR Earned</span>
                     </div>
                     <div class="agent-stat-card">
                         <span class="agent-stat-value" id="stakingRewards">0</span>
@@ -248,7 +248,7 @@
             <div class="staking-container">
                 <div class="staking-header">
                     <h1>Agent Staking</h1>
-                    <p>Stake your agents and earn NXS rewards</p>
+                    <p>Stake your agents and earn TSTR rewards</p>
                 </div>
                 <div class="staking-info">
                     <div class="staking-card">
@@ -259,7 +259,7 @@
                         <p>For Starter tier agents</p>
                         <div class="staking-stats">
                             <div><span>TVL:</span> <strong>1,234 Agents</strong></div>
-                            <div><span>Reward:</span> <strong>10 NXS/day</strong></div>
+                            <div><span>Reward:</span> <strong>10 TSTR/day</strong></div>
                         </div>
                         <button class="btn-neon-small" disabled>Stake</button>
                     </div>
@@ -271,7 +271,7 @@
                         <p>For Pro tier agents</p>
                         <div class="staking-stats">
                             <div><span>TVL:</span> <strong>856 Agents</strong></div>
-                            <div><span>Reward:</span> <strong>25 NXS/day</strong></div>
+                            <div><span>Reward:</span> <strong>25 TSTR/day</strong></div>
                         </div>
                         <button class="btn-neon-small" disabled>Stake</button>
                     </div>
@@ -283,7 +283,7 @@
                         <p>For Elite tier agents</p>
                         <div class="staking-stats">
                             <div><span>TVL:</span> <strong>342 Agents</strong></div>
-                            <div><span>Reward:</span> <strong>50 NXS/day</strong></div>
+                            <div><span>Reward:</span> <strong>50 TSTR/day</strong></div>
                         </div>
                         <button class="btn-neon-small" disabled>Stake</button>
                     </div>
@@ -295,7 +295,7 @@
                         <p>For Legendary tier agents</p>
                         <div class="staking-stats">
                             <div><span>TVL:</span> <strong>89 Agents</strong></div>
-                            <div><span>Reward:</span> <strong>100 NXS/day</strong></div>
+                            <div><span>Reward:</span> <strong>100 TSTR/day</strong></div>
                         </div>
                         <button class="btn-neon-small" disabled>Stake</button>
                     </div>
@@ -385,7 +385,7 @@
                         </div>
                         <div class="price-row">
                             <span>Or pay with:</span>
-                            <span class="price-nxs" id="buyAgentPriceNXS">0 NXS</span>
+                            <span class="price-nxs" id="buyAgentPriceTSTR">0 TSTR</span>
                         </div>
                     </div>
                     <div class="buy-actions">
@@ -395,9 +395,9 @@
                             </svg>
                             Buy with ETH
                         </button>
-                        <button class="btn-buy-nxs" id="buyWithNXS">
+                        <button class="btn-buy-nxs" id="buyWithTSTR">
                             <span class="token-icon">◈</span>
-                            Buy with NXS
+                            Buy with TSTR
                         </button>
                     </div>
                 </div>
@@ -409,30 +409,30 @@
     <div class="modal-overlay" id="buyTokensModal">
         <div class="modal modal-tokens">
             <div class="modal-header">
-                <h2>Buy NXS Tokens</h2>
+                <h2>Buy TSTR Tokens</h2>
                 <button class="modal-close" id="closeBuyTokensModal">&times;</button>
             </div>
             <div class="buy-tokens-content">
                 <div class="token-packages">
                     <div class="token-package" data-amount="100" data-price="0.01">
-                        <span class="package-amount">100 NXS</span>
+                        <span class="package-amount">100 TSTR</span>
                         <span class="package-price">0.01 ETH</span>
                         <span class="package-bonus"></span>
                     </div>
                     <div class="token-package popular" data-amount="500" data-price="0.045">
                         <span class="popular-badge">Popular</span>
-                        <span class="package-amount">500 NXS</span>
+                        <span class="package-amount">500 TSTR</span>
                         <span class="package-price">0.045 ETH</span>
                         <span class="package-bonus">+10% Bonus</span>
                     </div>
                     <div class="token-package" data-amount="1000" data-price="0.08">
-                        <span class="package-amount">1000 NXS</span>
+                        <span class="package-amount">1000 TSTR</span>
                         <span class="package-price">0.08 ETH</span>
                         <span class="package-bonus">+20% Bonus</span>
                     </div>
                     <div class="token-package best" data-amount="5000" data-price="0.35">
                         <span class="best-badge">Best Value</span>
-                        <span class="package-amount">5000 NXS</span>
+                        <span class="package-amount">5000 TSTR</span>
                         <span class="package-price">0.35 ETH</span>
                         <span class="package-bonus">+30% Bonus</span>
                     </div>
@@ -528,8 +528,8 @@
                         <span class="profile-stat-label">ETH</span>
                     </div>
                     <div class="profile-stat">
-                        <span class="profile-stat-value" id="profileNXS">0</span>
-                        <span class="profile-stat-label">NXS</span>
+                        <span class="profile-stat-value" id="profileTSTR">0</span>
+                        <span class="profile-stat-label">TSTR</span>
                     </div>
                     <div class="profile-stat">
                         <span class="profile-stat-value" id="profileAgents">0</span>
@@ -540,7 +540,7 @@
                 <div class="profile-actions">
                     <button class="btn-profile-action" onclick="Web3App.openBuyTokensModal()">
                         <span class="token-icon">◈</span>
-                        Buy NXS
+                        Buy TSTR
                     </button>
                     <button class="btn-profile-action" onclick="UI.showSection('my-agents')">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">

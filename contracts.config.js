@@ -6,39 +6,27 @@
 const CONTRACT_ADDRESSES = {
     // Localhost (Hardhat)
     localhost: {
-        NexusToken: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-        NexusAgents: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-        NexusStaking: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
-    },
-    // Sepolia Testnet
-    sepolia: {
-        NexusToken: "",
-        NexusAgents: "",
-        NexusStaking: ""
-    },
-    // Mumbai Testnet
-    mumbai: {
-        NexusToken: "",
-        NexusAgents: "",
-        NexusStaking: ""
+        ThreadSTRToken: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        ThreadSTRAgents: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+        ThreadSTRStaking: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
     },
     // Base Mainnet
     base: {
-        NexusToken: "",
-        NexusAgents: "",
-        NexusStaking: ""
+        ThreadSTRToken: "",
+        ThreadSTRAgents: "",
+        ThreadSTRStaking: ""
     },
     // Base Sepolia Testnet
     baseSepolia: {
-        NexusToken: "",
-        NexusAgents: "",
-        NexusStaking: ""
+        ThreadSTRToken: "",
+        ThreadSTRAgents: "",
+        ThreadSTRStaking: ""
     }
 };
 
 // ABIs simplificados dos contratos
 const CONTRACT_ABIS = {
-    NexusToken: [
+    ThreadSTRToken: [
         "function name() view returns (string)",
         "function symbol() view returns (string)",
         "function decimals() view returns (uint8)",
@@ -55,7 +43,7 @@ const CONTRACT_ABIS = {
         "event TokensPurchased(address indexed buyer, uint256 amount, uint256 cost)"
     ],
 
-    NexusAgents: [
+    ThreadSTRAgents: [
         "function name() view returns (string)",
         "function symbol() view returns (string)",
         "function totalSupply() view returns (uint256)",
@@ -69,18 +57,18 @@ const CONTRACT_ABIS = {
         "function transferFrom(address from, address to, uint256 tokenId)",
         "function safeTransferFrom(address from, address to, uint256 tokenId)",
         "function tierPriceETH(uint8 tier) view returns (uint256)",
-        "function tierPriceNXS(uint8 tier) view returns (uint256)",
+        "function tierPriceTSTR(uint8 tier) view returns (uint256)",
         "function maxSupplyPerTier(uint8 tier) view returns (uint256)",
         "function currentSupplyPerTier(uint8 tier) view returns (uint256)",
         "function mintWithETH(string name, uint8 tier, string tokenURI) payable returns (uint256)",
-        "function mintWithNXS(string name, uint8 tier, string tokenURI) returns (uint256)",
+        "function mintWithTSTR(string name, uint8 tier, string tokenURI) returns (uint256)",
         "function getAgent(uint256 tokenId) view returns (tuple(uint256 id, string name, uint8 tier, uint256 power, uint256 intelligence, uint256 speed, uint256 mintedAt, bool isStaked))",
         "function getAgentsByOwner(address owner) view returns (uint256[])",
         "event AgentMinted(address indexed owner, uint256 indexed tokenId, uint8 tier, string name)",
         "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
     ],
 
-    NexusStaking: [
+    ThreadSTRStaking: [
         "function totalStaked() view returns (uint256)",
         "function rewardPool() view returns (uint256)",
         "function dailyRewardPerTier(uint8 tier) view returns (uint256)",
@@ -109,9 +97,6 @@ const AGENT_TIERS = {
 // Chain IDs
 const CHAIN_IDS = {
     mainnet: 1,
-    sepolia: 11155111,
-    goerli: 5,
-    mumbai: 80001,
     localhost: 31337,
     base: 8453,
     baseSepolia: 84532

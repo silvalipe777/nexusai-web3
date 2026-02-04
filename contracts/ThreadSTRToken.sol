@@ -6,25 +6,25 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * @title NexusToken (NXS)
+ * @title ThreadSTRToken (TSTR)
  * @dev Token ERC-20 para o ecossistema ThreadSTR
  */
-contract NexusToken is ERC20, ERC20Burnable, Ownable {
+contract ThreadSTRToken is ERC20, ERC20Burnable, Ownable {
 
     uint256 public constant MAX_SUPPLY = 1_000_000_000 * 10**18; // 1 bilhão de tokens
-    uint256 public tokenPrice = 0.0001 ether; // Preço inicial: 0.0001 ETH por NXS
+    uint256 public tokenPrice = 0.0001 ether; // Preço inicial: 0.0001 ETH por TSTR
 
     // Eventos
     event TokensPurchased(address indexed buyer, uint256 amount, uint256 cost);
     event TokenPriceUpdated(uint256 newPrice);
 
-    constructor() ERC20("ThreadSTR Token", "NXS") Ownable(msg.sender) {
+    constructor() ERC20("ThreadSTR Token", "TSTR") Ownable(msg.sender) {
         // Mint inicial para o deployer (10% do supply para liquidez)
         _mint(msg.sender, 100_000_000 * 10**18);
     }
 
     /**
-     * @dev Compra tokens NXS com ETH
+     * @dev Compra tokens TSTR com ETH
      */
     function buyTokens() external payable {
         require(msg.value > 0, "Envie ETH para comprar tokens");

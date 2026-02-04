@@ -3,21 +3,21 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "./NexusToken.sol";
-import "./NexusAgents.sol";
+import "./ThreadSTRToken.sol";
+import "./ThreadSTRAgents.sol";
 
 /**
- * @title NexusStaking
+ * @title ThreadSTRStaking
  * @dev Contrato de staking para agentes ThreadSTR
- * Usuários fazem stake de seus agentes NFT e ganham recompensas em NXS
+ * Usuários fazem stake de seus agentes NFT e ganham recompensas em TSTR
  */
-contract NexusStaking is Ownable, ReentrancyGuard {
+contract ThreadSTRStaking is Ownable, ReentrancyGuard {
 
-    NexusToken public nexusToken;
-    NexusAgents public nexusAgents;
+    ThreadSTRToken public threadToken;
+    ThreadSTRAgents public threadAgents;
 
-    // Recompensas diárias por tier (em NXS com 18 decimais)
-    mapping(NexusAgents.AgentTier => uint256) public dailyRewardPerTier;
+    // Recompensas diárias por tier (em TSTR com 18 decimais)
+    mapping(ThreadSTRAgents.AgentTier => uint256) public dailyRewardPerTier;
 
     // Estrutura de stake
     struct Stake {
@@ -25,7 +25,7 @@ contract NexusStaking is Ownable, ReentrancyGuard {
         address owner;
         uint256 stakedAt;
         uint256 lastClaimAt;
-        NexusAgents.AgentTier tier;
+        ThreadSTRAgents.AgentTier tier;
     }
 
     // Mapping de tokenId para Stake
@@ -41,34 +41,34 @@ contract NexusStaking is Ownable, ReentrancyGuard {
     uint256 public rewardPool;
 
     // Eventos
-    event Staked(address indexed owner, uint256 indexed tokenId, NexusAgents.AgentTier tier);
+    event Staked(address indexed owner, uint256 indexed tokenId, ThreadSTRAgents.AgentTier tier);
     event Unstaked(address indexed owner, uint256 indexed tokenId, uint256 rewards);
     event RewardsClaimed(address indexed owner, uint256 indexed tokenId, uint256 amount);
     event RewardPoolFunded(uint256 amount);
 
-    constructor(address _nexusToken, address _nexusAgents) Ownable(msg.sender) {
-        nexusToken = NexusToken(_nexusToken);
-        nexusAgents = NexusAgents(_nexusAgents);
+    constructor(address _threadToken, address _threadAgents) Ownable(msg.sender) {
+        threadToken = ThreadSTRToken(_threadToken);
+        threadAgents = ThreadSTRAgents(_threadAgents);
 
-        // Definir recompensas diárias por tier (em NXS)
-        dailyRewardPerTier[NexusAgents.AgentTier.STARTER] = 10 * 10**18;    // 10 NXS/dia
-        dailyRewardPerTier[NexusAgents.AgentTier.PRO] = 25 * 10**18;        // 25 NXS/dia
-        dailyRewardPerTier[NexusAgents.AgentTier.ELITE] = 50 * 10**18;      // 50 NXS/dia
-        dailyRewardPerTier[NexusAgents.AgentTier.LEGENDARY] = 100 * 10**18; // 100 NXS/dia
+        // Definir recompensas diárias por tier (em TSTR)
+        dailyRewardPerTier[ThreadSTRAgents.AgentTier.STARTER] = 10 * 10**18;    // 10 TSTR/dia
+        dailyRewardPerTier[ThreadSTRAgents.AgentTier.PRO] = 25 * 10**18;        // 25 TSTR/dia
+        dailyRewardPerTier[ThreadSTRAgents.AgentTier.ELITE] = 50 * 10**18;      // 50 TSTR/dia
+        dailyRewardPerTier[ThreadSTRAgents.AgentTier.LEGENDARY] = 100 * 10**18; // 100 TSTR/dia
     }
 
     /**
      * @dev Faz stake de um agente
      */
     function stake(uint256 tokenId) external nonReentrant {
-        require(nexusAgents.ownerOf(tokenId) == msg.sender, "Voce nao e o dono deste agente");
+        require(threadAgents.ownerOf(tokenId) == msg.sender, "Voce nao e o dono deste agente");
         require(stakes[tokenId].owner == address(0), "Agente ja esta em stake");
 
         // Transfere o NFT para este contrato
-        nexusAgents.transferFrom(msg.sender, address(this), tokenId);
+        threadAgents.transferFrom(msg.sender, address(this), tokenId);
 
         // Obtém informações do agente
-        NexusAgents.Agent memory agent = nexusAgents.getAgent(tokenId);
+        ThreadSTRAgents.Agent memory agent = threadAgents.getAgent(tokenId);
 
         // Cria o stake
         stakes[tokenId] = Stake({
@@ -96,11 +96,11 @@ contract NexusStaking is Ownable, ReentrancyGuard {
         uint256 rewards = calculateRewards(tokenId);
         if (rewards > 0 && rewards <= rewardPool) {
             rewardPool -= rewards;
-            nexusToken.transfer(msg.sender, rewards);
+            threadToken.transfer(msg.sender, rewards);
         }
 
         // Devolve o NFT
-        nexusAgents.transferFrom(address(this), msg.sender, tokenId);
+        threadAgents.transferFrom(address(this), msg.sender, tokenId);
 
         // Remove do array de stakes do owner
         _removeFromStakedTokens(msg.sender, tokenId);
@@ -126,7 +126,7 @@ contract NexusStaking is Ownable, ReentrancyGuard {
         rewardPool -= rewards;
         stakeInfo.lastClaimAt = block.timestamp;
 
-        nexusToken.transfer(msg.sender, rewards);
+        threadToken.transfer(msg.sender, rewards);
 
         emit RewardsClaimed(msg.sender, tokenId, rewards);
     }
@@ -154,7 +154,7 @@ contract NexusStaking is Ownable, ReentrancyGuard {
         require(totalRewards <= rewardPool, "Pool de recompensas insuficiente");
 
         rewardPool -= totalRewards;
-        nexusToken.transfer(msg.sender, totalRewards);
+        threadToken.transfer(msg.sender, totalRewards);
     }
 
     /**
@@ -203,7 +203,7 @@ contract NexusStaking is Ownable, ReentrancyGuard {
      * @dev Adiciona fundos ao pool de recompensas
      */
     function fundRewardPool(uint256 amount) external {
-        require(nexusToken.transferFrom(msg.sender, address(this), amount), "Transferencia falhou");
+        require(threadToken.transferFrom(msg.sender, address(this), amount), "Transferencia falhou");
         rewardPool += amount;
         emit RewardPoolFunded(amount);
     }
@@ -211,7 +211,7 @@ contract NexusStaking is Ownable, ReentrancyGuard {
     /**
      * @dev Atualiza recompensa diária por tier (apenas owner)
      */
-    function setDailyReward(NexusAgents.AgentTier tier, uint256 reward) external onlyOwner {
+    function setDailyReward(ThreadSTRAgents.AgentTier tier, uint256 reward) external onlyOwner {
         dailyRewardPerTier[tier] = reward;
     }
 
@@ -230,12 +230,12 @@ contract NexusStaking is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @dev Retira NXS excedente do pool (apenas owner)
+     * @dev Retira TSTR excedente do pool (apenas owner)
      */
     function withdrawExcessRewards(uint256 amount) external onlyOwner {
         require(amount <= rewardPool, "Amount maior que o pool");
         rewardPool -= amount;
-        nexusToken.transfer(owner(), amount);
+        threadToken.transfer(owner(), amount);
     }
 
     // Necessário para receber NFTs via safeTransferFrom

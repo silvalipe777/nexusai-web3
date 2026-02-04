@@ -5,15 +5,15 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./NexusToken.sol";
+import "./ThreadSTRToken.sol";
 
 /**
- * @title NexusAgents
+ * @title ThreadSTRAgents
  * @dev Contrato NFT ERC-721 para agentes de IA do ThreadSTR
  */
-contract NexusAgents is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+contract ThreadSTRAgents is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     uint256 private _tokenIdCounter;
-    NexusToken public nexusToken;
+    ThreadSTRToken public threadToken;
 
     // Tiers de agentes
     enum AgentTier { STARTER, PRO, ELITE, LEGENDARY }
@@ -32,8 +32,8 @@ contract NexusAgents is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     // Preços por tier (em ETH)
     mapping(AgentTier => uint256) public tierPriceETH;
-    // Preços por tier (em NXS)
-    mapping(AgentTier => uint256) public tierPriceNXS;
+    // Preços por tier (em TSTR)
+    mapping(AgentTier => uint256) public tierPriceTSTR;
 
     // Mapping de tokenId para Agent
     mapping(uint256 => Agent) public agents;
@@ -46,10 +46,10 @@ contract NexusAgents is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     event AgentMinted(address indexed owner, uint256 indexed tokenId, AgentTier tier, string name);
     event AgentStaked(uint256 indexed tokenId, address indexed owner);
     event AgentUnstaked(uint256 indexed tokenId, address indexed owner);
-    event PriceUpdated(AgentTier tier, uint256 priceETH, uint256 priceNXS);
+    event PriceUpdated(AgentTier tier, uint256 priceETH, uint256 priceTSTR);
 
-    constructor(address _nexusToken) ERC721("ThreadSTR Agent", "TSTRA") Ownable(msg.sender) {
-        nexusToken = NexusToken(_nexusToken);
+    constructor(address _threadToken) ERC721("ThreadSTR Agent", "TSTRA") Ownable(msg.sender) {
+        threadToken = ThreadSTRToken(_threadToken);
 
         // Definir preços iniciais em ETH (wei)
         tierPriceETH[AgentTier.STARTER] = 0.01 ether;
@@ -57,11 +57,11 @@ contract NexusAgents is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         tierPriceETH[AgentTier.ELITE] = 0.15 ether;
         tierPriceETH[AgentTier.LEGENDARY] = 0.5 ether;
 
-        // Definir preços em NXS (com 18 decimais)
-        tierPriceNXS[AgentTier.STARTER] = 100 * 10**18;
-        tierPriceNXS[AgentTier.PRO] = 500 * 10**18;
-        tierPriceNXS[AgentTier.ELITE] = 1500 * 10**18;
-        tierPriceNXS[AgentTier.LEGENDARY] = 5000 * 10**18;
+        // Definir preços em TSTR (com 18 decimais)
+        tierPriceTSTR[AgentTier.STARTER] = 100 * 10**18;
+        tierPriceTSTR[AgentTier.PRO] = 500 * 10**18;
+        tierPriceTSTR[AgentTier.ELITE] = 1500 * 10**18;
+        tierPriceTSTR[AgentTier.LEGENDARY] = 5000 * 10**18;
 
         // Supply máximo por tier
         maxSupplyPerTier[AgentTier.STARTER] = 10000;
@@ -92,20 +92,20 @@ contract NexusAgents is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     }
 
     /**
-     * @dev Mint de agente pagando com NXS tokens
+     * @dev Mint de agente pagando com TSTR tokens
      */
-    function mintWithNXS(
+    function mintWithTSTR(
         string memory name,
         AgentTier tier,
         string memory tokenURI_
     ) external returns (uint256) {
-        uint256 price = tierPriceNXS[tier];
-        require(nexusToken.balanceOf(msg.sender) >= price, "NXS insuficiente");
-        require(nexusToken.allowance(msg.sender, address(this)) >= price, "Aprove os tokens primeiro");
+        uint256 price = tierPriceTSTR[tier];
+        require(threadToken.balanceOf(msg.sender) >= price, "TSTR insuficiente");
+        require(threadToken.allowance(msg.sender, address(this)) >= price, "Aprove os tokens primeiro");
         require(currentSupplyPerTier[tier] < maxSupplyPerTier[tier], "Supply maximo atingido para este tier");
 
-        // Transfere NXS do usuário para o contrato
-        nexusToken.transferFrom(msg.sender, address(this), price);
+        // Transfere TSTR do usuário para o contrato
+        threadToken.transferFrom(msg.sender, address(this), price);
 
         return _mintAgent(msg.sender, name, tier, tokenURI_);
     }
@@ -200,10 +200,10 @@ contract NexusAgents is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     /**
      * @dev Atualiza preços (apenas owner)
      */
-    function setTierPrice(AgentTier tier, uint256 priceETH, uint256 priceNXS) external onlyOwner {
+    function setTierPrice(AgentTier tier, uint256 priceETH, uint256 priceTSTR) external onlyOwner {
         tierPriceETH[tier] = priceETH;
-        tierPriceNXS[tier] = priceNXS;
-        emit PriceUpdated(tier, priceETH, priceNXS);
+        tierPriceTSTR[tier] = priceTSTR;
+        emit PriceUpdated(tier, priceETH, priceTSTR);
     }
 
     /**
@@ -216,12 +216,12 @@ contract NexusAgents is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     }
 
     /**
-     * @dev Retira NXS do contrato (apenas owner)
+     * @dev Retira TSTR do contrato (apenas owner)
      */
-    function withdrawNXS() external onlyOwner {
-        uint256 balance = nexusToken.balanceOf(address(this));
-        require(balance > 0, "Sem NXS");
-        nexusToken.transfer(owner(), balance);
+    function withdrawTSTR() external onlyOwner {
+        uint256 balance = threadToken.balanceOf(address(this));
+        require(balance > 0, "Sem TSTR");
+        threadToken.transfer(owner(), balance);
     }
 
     // Overrides necessários

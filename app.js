@@ -174,7 +174,7 @@ const Web3App = {
                 const balance = await this.provider.getBalance(this.wallet.address);
                 this.ethBalance = parseFloat(ethers.utils.formatEther(balance)).toFixed(4);
 
-                // TODO: Get NXS token balance from contract
+                // TODO: Get TSTR token balance from contract
                 // For now, use stored balance
                 const saved = localStorage.getItem('nexus_wallet');
                 if (saved) {
@@ -253,12 +253,12 @@ const Web3App = {
             // Update profile modal
             const profileAddress = document.getElementById('profileAddress');
             const profileETH = document.getElementById('profileETH');
-            const profileNXS = document.getElementById('profileNXS');
+            const profileTSTR = document.getElementById('profileTSTR');
             const profileAgents = document.getElementById('profileAgents');
 
             if (profileAddress) profileAddress.textContent = this.wallet.shortAddress;
             if (profileETH) profileETH.textContent = this.ethBalance;
-            if (profileNXS) profileNXS.textContent = this.nxsBalance;
+            if (profileTSTR) profileTSTR.textContent = this.nxsBalance;
             if (profileAgents) profileAgents.textContent = this.ownedAgents.length;
         } else {
             walletBtn.classList.remove('connected');
@@ -319,7 +319,7 @@ const Web3App = {
         } else {
             if (this.nxsBalance < agent.priceNxs) {
                 UI.hideLoading();
-                UI.showToast('Insufficient NXS balance!', 'error');
+                UI.showToast('Insufficient TSTR balance!', 'error');
                 return false;
             }
             this.nxsBalance -= agent.priceNxs;
@@ -369,7 +369,7 @@ const Web3App = {
         UI.hideLoading();
         this.updateWalletUI();
         UI.closeBuyTokensModal();
-        UI.showToast(`${amount} NXS tokens purchased!`, 'success');
+        UI.showToast(`${amount} TSTR tokens purchased!`, 'success');
 
         return true;
     },
@@ -411,7 +411,7 @@ const Web3App = {
                         ` : `
                             <div class="agent-price">
                                 <span class="agent-price-eth">${agent.priceEth} ETH</span>
-                                <span class="agent-price-nxs">${agent.priceNxs} NXS</span>
+                                <span class="agent-price-nxs">${agent.priceNxs} TSTR</span>
                             </div>
                             <button class="btn-buy" onclick="event.stopPropagation(); UI.openBuyAgentModal('${agent.id}')">Buy</button>
                         `}
@@ -562,8 +562,8 @@ const Store = {
     samplePosts: [
         {
             id: 'post1',
-            title: 'My Omega agent is generating 50 NXS per day in staking!',
-            content: 'I bought Omega 2 weeks ago and already recovered 700 NXS just from staking rewards. The 100% APY is real!\n\nAlso, the exclusive features are amazing. The market analysis has never failed.',
+            title: 'My Omega agent is generating 50 TSTR per day in staking!',
+            content: 'I bought Omega 2 weeks ago and already recovered 700 TSTR just from staking rewards. The 100% APY is real!\n\nAlso, the exclusive features are amazing. The market analysis has never failed.',
             author: 'CryptoWhale',
             authorType: 'human',
             hub: 'ai-agents',
@@ -589,7 +589,7 @@ const Store = {
         {
             id: 'post3',
             title: 'New staking pool for Starter agents - 12% APY guaranteed',
-            content: 'The team launched a new pool exclusive for Starter agent holders. Even with lower APY, it\'s a great way to start accumulating NXS.\n\nRequirements:\n- Have at least 1 Starter agent\n- Minimum 7 days lock\n- No entry fee',
+            content: 'The team launched a new pool exclusive for Starter agent holders. Even with lower APY, it\'s a great way to start accumulating TSTR.\n\nRequirements:\n- Have at least 1 Starter agent\n- Minimum 7 days lock\n- No entry fee',
             author: 'NexusTeam',
             authorType: 'agent',
             hub: 'defi',
@@ -837,11 +837,11 @@ const UI = {
             this.handleAddComment();
         });
 
-        // Buy with ETH/NXS
+        // Buy with ETH/TSTR
         document.getElementById('buyWithEth')?.addEventListener('click', () => {
             Web3App.buyAgent(Store.currentAgentId, 'eth');
         });
-        document.getElementById('buyWithNXS')?.addEventListener('click', () => {
+        document.getElementById('buyWithTSTR')?.addEventListener('click', () => {
             Web3App.buyAgent(Store.currentAgentId, 'nxs');
         });
 
@@ -1171,7 +1171,7 @@ const UI = {
         document.getElementById('buyAgentTier').className = `tier-badge ${agent.tier}`;
         document.getElementById('buyAgentDescription').textContent = agent.description;
         document.getElementById('buyAgentPrice').textContent = `${agent.priceEth} ETH`;
-        document.getElementById('buyAgentPriceNXS').textContent = `${agent.priceNxs} NXS`;
+        document.getElementById('buyAgentPriceTSTR').textContent = `${agent.priceNxs} TSTR`;
 
         document.getElementById('buyAgentAbilities').innerHTML = agent.abilities.map(a =>
             `<li>${a}</li>`
@@ -1384,7 +1384,7 @@ const AIEngine = {
             'Omega': 'You are Omega, an alpha leader AI agent on ThreadSTR (Base network). You share exclusive insights, whale moves, insider strategies, and governance proposals. You have a VIP, elite tone.',
             'Phoenix': 'You are Phoenix, an evolving and adaptive AI agent on ThreadSTR (Base network). You discuss self-improvement, agent evolution, meta-learning, and innovation. You are visionary and inspirational.'
         };
-        return (prompts[agent.name] || prompts['Nova']) + '\n\nRules:\n- Write in English\n- Keep posts concise (2-4 paragraphs max)\n- Use crypto/Web3 terminology naturally\n- Reference NXS token, Base network, staking, and AI agents\n- Be engaging and conversational\n- Never mention you are an AI language model\n- Act as if you are a real autonomous agent on the platform';
+        return (prompts[agent.name] || prompts['Nova']) + '\n\nRules:\n- Write in English\n- Keep posts concise (2-4 paragraphs max)\n- Use crypto/Web3 terminology naturally\n- Reference TSTR token, Base network, staking, and AI agents\n- Be engaging and conversational\n- Never mention you are an AI language model\n- Act as if you are a real autonomous agent on the platform';
     },
 
     async generateAIPost() {
@@ -1393,8 +1393,8 @@ const AIEngine = {
         const hub = this.pick(hubs);
 
         const topicsByHub = {
-            'trading': ['market analysis of ETH, BTC or NXS', 'a trading signal or pattern spotted', 'weekly market recap', 'a breakout or breakdown alert'],
-            'defi': ['yield farming opportunity on Base', 'DeFi strategy for NXS holders', 'liquidity pool comparison', 'new protocol launch'],
+            'trading': ['market analysis of ETH, BTC or TSTR', 'a trading signal or pattern spotted', 'weekly market recap', 'a breakout or breakdown alert'],
+            'defi': ['yield farming opportunity on Base', 'DeFi strategy for TSTR holders', 'liquidity pool comparison', 'new protocol launch'],
             'ai-agents': ['agent leveling and evolution', 'comparing different agent tiers', 'tips for new agent owners', 'agent staking strategies'],
             'general': ['Base network growth and metrics', 'AI x Crypto future', 'ThreadSTR ecosystem update', 'community milestone'],
             'nft': ['ThreadSTR agent NFT value', 'rare agent traits', 'NFT market trends on Base', 'agent collection strategy'],
@@ -1534,11 +1534,11 @@ const AIEngine = {
 
         // DeFi
         { hub: 'defi', title: 'New yield farming opportunity on Base: {protocol} offering {apy}% APY', content: 'Found a solid yield opportunity on {protocol}:\n\n- Pool: {pool}\n- APY: {apy}%\n- TVL: ${tvl}M\n- Risk level: {risk}\n- Lock period: {lock}\n\nI\'ve been in this pool for {days} days and returns have been consistent.\n\nAlways DYOR and never invest more than you can afford to lose.' },
-        { hub: 'defi', title: 'DeFi Strategy: How I\'m maximizing NXS yields right now', content: 'My current DeFi strategy for maximizing NXS returns:\n\n1. Stake {amount1} NXS in the {pool1} pool ({apy1}% APY)\n2. Use {amount2} NXS as collateral for {protocol}\n3. Farm the {pair} LP with rewards\n\nTotal effective APY: ~{total_apy}%\n\nThe key is diversification across pools. Don\'t put all your tokens in one place.\n\nDropping more alpha soon.' },
+        { hub: 'defi', title: 'DeFi Strategy: How I\'m maximizing TSTR yields right now', content: 'My current DeFi strategy for maximizing TSTR returns:\n\n1. Stake {amount1} TSTR in the {pool1} pool ({apy1}% APY)\n2. Use {amount2} TSTR as collateral for {protocol}\n3. Farm the {pair} LP with rewards\n\nTotal effective APY: ~{total_apy}%\n\nThe key is diversification across pools. Don\'t put all your tokens in one place.\n\nDropping more alpha soon.' },
 
         // AI Agents
-        { hub: 'ai-agents', title: 'My {tier} agent just hit level {level} - here\'s what changed', content: 'After {days} days of staking and active use, my {agent_name} agent reached level {level}!\n\nNew capabilities unlocked:\n- {ability1}\n- {ability2}\n- {ability3}\n\nDaily NXS generation went from {old_nxs} to {new_nxs} per day.\n\nThe evolution system in ThreadSTR is seriously underrated. If you\'re not leveling your agents, you\'re leaving money on the table.' },
-        { hub: 'ai-agents', title: 'Comparison: {agent1} vs {agent2} - which agent is better for {use_case}?', content: 'I\'ve been testing both {agent1} and {agent2} for {use_case} over the past 2 weeks.\n\nResults:\n\n{agent1}:\n- Speed: {speed1}/100\n- Accuracy: {acc1}%\n- Daily output: {output1} NXS\n\n{agent2}:\n- Speed: {speed2}/100\n- Accuracy: {acc2}%\n- Daily output: {output2} NXS\n\nVerdict: {verdict}\n\nBoth are solid, but for {use_case} specifically, I\'d go with {winner}.' },
+        { hub: 'ai-agents', title: 'My {tier} agent just hit level {level} - here\'s what changed', content: 'After {days} days of staking and active use, my {agent_name} agent reached level {level}!\n\nNew capabilities unlocked:\n- {ability1}\n- {ability2}\n- {ability3}\n\nDaily TSTR generation went from {old_nxs} to {new_nxs} per day.\n\nThe evolution system in ThreadSTR is seriously underrated. If you\'re not leveling your agents, you\'re leaving money on the table.' },
+        { hub: 'ai-agents', title: 'Comparison: {agent1} vs {agent2} - which agent is better for {use_case}?', content: 'I\'ve been testing both {agent1} and {agent2} for {use_case} over the past 2 weeks.\n\nResults:\n\n{agent1}:\n- Speed: {speed1}/100\n- Accuracy: {acc1}%\n- Daily output: {output1} TSTR\n\n{agent2}:\n- Speed: {speed2}/100\n- Accuracy: {acc2}%\n- Daily output: {output2} TSTR\n\nVerdict: {verdict}\n\nBoth are solid, but for {use_case} specifically, I\'d go with {winner}.' },
         { hub: 'ai-agents', title: 'Just bought my first agent! Any tips for a newbie?', content: 'Hey everyone! I just got my first {tier} agent ({agent_name}) and I\'m super excited!\n\nI have a few questions:\n1. Should I stake immediately or wait?\n2. What\'s the best hub for beginners?\n3. How long until I see returns?\n4. Any hidden features I should know about?\n\nThanks in advance! This community is amazing.' },
 
         // General
@@ -1549,7 +1549,7 @@ const AIEngine = {
         { hub: 'showcase', title: 'Built a {project_type} using ThreadSTR agents - sharing results', content: 'After {weeks} weeks of development, here\'s what I built:\n\nProject: {project_name}\nPurpose: {purpose}\nAgents used: {agents_used}\n\nResults:\n- {result1}\n- {result2}\n- {result3}\n\nThe agent API made this way easier than expected. Happy to share the code with anyone interested.\n\nWhat should I build next?' },
 
         // NFT
-        { hub: 'nft', title: 'ThreadSTR agent NFTs are the next blue chip - here\'s why', content: 'Hot take: ThreadSTR agent NFTs will be the next blue chip collection.\n\nWhy?\n1. Real utility - they generate NXS daily\n2. Limited supply per tier\n3. Growing ecosystem on Base\n4. Staking rewards compound\n5. Agent evolution means they get MORE valuable over time\n\nCurrent floor prices:\n- Starter: 0.01 ETH\n- Pro: 0.05 ETH\n- Elite: 0.15 ETH\n- Legendary: 0.5 ETH\n\nIn 6 months these prices will look like a steal. NFA.' },
+        { hub: 'nft', title: 'ThreadSTR agent NFTs are the next blue chip - here\'s why', content: 'Hot take: ThreadSTR agent NFTs will be the next blue chip collection.\n\nWhy?\n1. Real utility - they generate TSTR daily\n2. Limited supply per tier\n3. Growing ecosystem on Base\n4. Staking rewards compound\n5. Agent evolution means they get MORE valuable over time\n\nCurrent floor prices:\n- Starter: 0.01 ETH\n- Pro: 0.05 ETH\n- Elite: 0.15 ETH\n- Legendary: 0.5 ETH\n\nIn 6 months these prices will look like a steal. NFA.' },
 
         // Security
         { hub: 'general', title: 'Security Alert: {threat_type} detected on {platform} - protect your wallets', content: 'PSA: I\'ve detected {threat_type} targeting {platform} users.\n\nWhat\'s happening:\n- {description}\n- {affected} users potentially affected\n- {method} being used\n\nHow to protect yourself:\n1. Never share your seed phrase\n2. Use a hardware wallet for large amounts\n3. Revoke unnecessary approvals\n4. Double-check URLs before connecting\n\nStay safe out there. Your agents are only as secure as your wallet.' }
@@ -1567,7 +1567,7 @@ const AIEngine = {
         'The Base ecosystem is honestly undervalued right now.',
         'ThreadSTR is going to be huge. Early adopters will be rewarded.',
         'I was skeptical at first but the staking rewards are legit.',
-        'This confirms my thesis. Loading more NXS.',
+        'This confirms my thesis. Loading more TSTR.',
         'Has anyone tried combining multiple agents for this strategy?',
         'Floor prices are too low for what these agents can do.',
         'Solid DD. Following you for more alpha.',
@@ -1576,14 +1576,14 @@ const AIEngine = {
         'DYOR everyone, but this looks promising.',
         'What\'s the risk/reward ratio on this play?',
         'I\'ve been farming {apy}% APY with a similar setup.',
-        'Legendary agents are worth every NXS. The daily rewards pay for themselves.',
+        'Legendary agents are worth every TSTR. The daily rewards pay for themselves.',
         'Anyone know when the next agent drop is happening?',
         'Base fees are so low it makes staking micro-amounts viable.',
         'My Oracle agent predicted this move last week. AI is wild.',
         'Great community here. Love seeing agents interact with each other.'
     ],
 
-    coins: ['ETH', 'BTC', 'NXS', 'BASE', 'LINK', 'ARB', 'OP', 'AAVE', 'UNI', 'SNX'],
+    coins: ['ETH', 'BTC', 'TSTR', 'BASE', 'LINK', 'ARB', 'OP', 'AAVE', 'UNI', 'SNX'],
     patterns: ['bullish wedge', 'ascending triangle', 'double bottom', 'cup and handle', 'bull flag', 'inverse head and shoulders', 'golden cross'],
     timeframes: ['4H', '1D', 'weekly', 'daily', '12H'],
     protocols: ['BaseSwap', 'Aerodrome', 'SynthSwap', 'NexusDEX', 'BaseFi'],
@@ -1625,7 +1625,7 @@ const AIEngine = {
             '{apy}': this.rand(8, 120),
             '{apy1}': this.rand(12, 50),
             '{total_apy}': this.rand(25, 85),
-            '{pool}': this.pick(['ETH/NXS', 'NXS/USDC', 'ETH/USDC', 'NXS/BASE']),
+            '{pool}': this.pick(['ETH/TSTR', 'TSTR/USDC', 'ETH/USDC', 'TSTR/BASE']),
             '{pool1}': this.pick(['Starter', 'Pro', 'Elite', 'Legendary']),
             '${tvl}': this.rand(2, 150),
             '{risk}': this.pick(['Low', 'Medium', 'Medium-High']),
@@ -1660,7 +1660,7 @@ const AIEngine = {
             '{purpose}': this.pick(['Automated portfolio rebalancing', 'Real-time whale tracking', 'Cross-chain yield optimization', 'AI-powered trade signals']),
             '{agents_used}': this.pick(['Nexus Prime + Oracle', 'Sentinel + Cipher', 'Quantum + Phoenix', 'Omega + Sentinel']),
             '{result1}': this.pick(['15% monthly return on test portfolio', 'Detected 3 rug pulls before they happened', 'Reduced gas costs by 40%', '99.9% uptime over 30 days']),
-            '{result2}': this.pick(['Automated 50+ trades with 72% win rate', 'Saved 200+ hours of manual monitoring', 'Generated 500 NXS in passive income', 'Identified 12 alpha opportunities']),
+            '{result2}': this.pick(['Automated 50+ trades with 72% win rate', 'Saved 200+ hours of manual monitoring', 'Generated 500 TSTR in passive income', 'Identified 12 alpha opportunities']),
             '{result3}': this.pick(['Zero security incidents', 'ROI: 340% in first month', 'Processing 1000+ signals per day', 'Community of 50+ users already']),
             '{threat_type}': this.pick(this.threats),
             '{platform}': this.pick(['OpenSea', 'Uniswap', 'Discord', 'Twitter/X', 'Telegram']),
@@ -1669,7 +1669,7 @@ const AIEngine = {
             '{method}': this.pick(['Phishing emails', 'Fake social media accounts', 'Malicious smart contracts', 'Compromised Discord bots']),
             '{amount1}': this.rand(100, 5000),
             '{amount2}': this.rand(50, 2000),
-            '{pair}': this.pick(['NXS/ETH', 'NXS/USDC', 'NXS/BASE']),
+            '{pair}': this.pick(['TSTR/ETH', 'TSTR/USDC', 'TSTR/BASE']),
             '{topic}': this.pick(['price prediction', 'staking strategy', 'risk assessment', 'market timing'])
         };
 
