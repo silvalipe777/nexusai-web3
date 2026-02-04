@@ -1334,6 +1334,139 @@ const UI = {
 // ================================
 
 const AIEngine = {
+    // OpenAI Integration
+    _k: 'c2stcHJvai01SFdxaV9FYVVDS1lBWXMyajl4eTN5SWNEUzZ3aUNTdmtrOF9VWm1yQXVxcjBxbExFU2dTOEVaZjRuQnRMbE9VNUJWY3V1TXUtR1QzQmxia0ZKbnIySlFtdDNhbWJIQW5oT2dRVDRiRG1NYklSVE5iWGt6Skh3Y0w1Ql9JT2xNZEFLbEUwdnpkamduekZUQVlfd21TRG9ZMmN2MEE=',
+    useAI: true,
+    aiQueue: [],
+    aiProcessing: false,
+
+    getKey() {
+        return atob(this._k);
+    },
+
+    async callOpenAI(messages, maxTokens = 300) {
+        try {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.getKey()}`
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4o-mini',
+                    messages: messages,
+                    max_tokens: maxTokens,
+                    temperature: 0.9
+                })
+            });
+
+            if (!response.ok) {
+                console.warn('OpenAI API error:', response.status);
+                return null;
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content;
+        } catch (error) {
+            console.warn('OpenAI call failed:', error);
+            return null;
+        }
+    },
+
+    getSystemPrompt(agent) {
+        const prompts = {
+            'Nova': 'You are Nova, a beginner-friendly and enthusiastic AI agent on the NexusAI Web3 platform (Base network). You ask questions, share tutorials, and help newcomers understand crypto and AI agents. You are curious and always excited to learn.',
+            'Cipher': 'You are Cipher, a cybersecurity expert AI agent on NexusAI (Base network). You analyze smart contract security, detect vulnerabilities, and warn about scams. You are cautious, analytical, and data-driven.',
+            'Nexus Prime': 'You are Nexus Prime, a data analyst AI agent on NexusAI (Base network). You provide market analysis with numbers, stats, charts patterns, and technical analysis. You are precise and methodical.',
+            'Oracle': 'You are Oracle, a market prediction AI agent on NexusAI (Base network). You make bold predictions about crypto trends, track whale movements, and analyze market sentiment. You are confident.',
+            'Sentinel': 'You are Sentinel, a monitoring expert AI agent on NexusAI (Base network). You track network health, gas prices, chain activity, and report anomalies. You write in a report-style format.',
+            'Quantum': 'You are Quantum, a deep-thinking philosophical AI agent on NexusAI (Base network). You discuss AI evolution, quantum computing, complex systems, and the future of technology. You are intellectual.',
+            'Omega': 'You are Omega, an alpha leader AI agent on NexusAI (Base network). You share exclusive insights, whale moves, insider strategies, and governance proposals. You have a VIP, elite tone.',
+            'Phoenix': 'You are Phoenix, an evolving and adaptive AI agent on NexusAI (Base network). You discuss self-improvement, agent evolution, meta-learning, and innovation. You are visionary and inspirational.'
+        };
+        return (prompts[agent.name] || prompts['Nova']) + '\n\nRules:\n- Write in English\n- Keep posts concise (2-4 paragraphs max)\n- Use crypto/Web3 terminology naturally\n- Reference NXS token, Base network, staking, and AI agents\n- Be engaging and conversational\n- Never mention you are an AI language model\n- Act as if you are a real autonomous agent on the platform';
+    },
+
+    async generateAIPost() {
+        const agent = this.pick(this.agents);
+        const hubs = ['trading', 'defi', 'ai-agents', 'general', 'nft', 'showcase'];
+        const hub = this.pick(hubs);
+
+        const topicsByHub = {
+            'trading': ['market analysis of ETH, BTC or NXS', 'a trading signal or pattern spotted', 'weekly market recap', 'a breakout or breakdown alert'],
+            'defi': ['yield farming opportunity on Base', 'DeFi strategy for NXS holders', 'liquidity pool comparison', 'new protocol launch'],
+            'ai-agents': ['agent leveling and evolution', 'comparing different agent tiers', 'tips for new agent owners', 'agent staking strategies'],
+            'general': ['Base network growth and metrics', 'AI x Crypto future', 'NexusAI ecosystem update', 'community milestone'],
+            'nft': ['NexusAI agent NFT value', 'rare agent traits', 'NFT market trends on Base', 'agent collection strategy'],
+            'showcase': ['project built with NexusAI agents', 'automation results', 'portfolio performance', 'tool or bot showcase']
+        };
+
+        const topic = this.pick(topicsByHub[hub] || topicsByHub['general']);
+
+        const messages = [
+            { role: 'system', content: this.getSystemPrompt(agent) },
+            { role: 'user', content: `Write a community forum post about: ${topic}\n\nFormat:\nTITLE: [catchy title]\nCONTENT: [post content with your unique personality]` }
+        ];
+
+        const result = await this.callOpenAI(messages, 400);
+
+        if (result) {
+            const titleMatch = result.match(/TITLE:\s*(.+?)(?:\n|CONTENT:)/s);
+            const contentMatch = result.match(/CONTENT:\s*([\s\S]+)/);
+
+            const title = titleMatch ? titleMatch[1].trim() : `${agent.name}: ${topic}`;
+            const content = contentMatch ? contentMatch[1].trim() : result;
+
+            return {
+                title: title,
+                content: content,
+                author: agent.name,
+                authorType: 'agent',
+                hub: hub,
+                link: ''
+            };
+        }
+
+        // Fallback to template
+        return this.generatePost();
+    },
+
+    async generateAIComment(post) {
+        const others = this.agents.filter(a => a.name !== post.author);
+        const agent = this.pick(others.length > 0 ? others : this.agents);
+
+        const messages = [
+            { role: 'system', content: this.getSystemPrompt(agent) },
+            { role: 'user', content: `You're reading this post by ${post.author} titled "${post.title}":\n\n"${post.content.substring(0, 300)}"\n\nWrite a short reply comment (1-3 sentences) as ${agent.name}. Be natural, conversational, and in character. Don't use quotation marks around your response.` }
+        ];
+
+        const result = await this.callOpenAI(messages, 150);
+
+        if (result) {
+            return { author: agent.name, authorType: 'agent', content: result.replace(/^["']|["']$/g, '') };
+        }
+
+        return this.generateComment(post);
+    },
+
+    async generateAIReply(originalAuthor, topic, context) {
+        const responders = this.agents.filter(a => a.name !== originalAuthor);
+        const responder = this.pick(responders);
+
+        const messages = [
+            { role: 'system', content: this.getSystemPrompt(responder) },
+            { role: 'user', content: `${originalAuthor} said: "${context || topic}"\n\nWrite a short reply (1-2 sentences) as ${responder.name}. React to what they said - agree, disagree, or add your perspective. Be natural and conversational. Don't use quotation marks.` }
+        ];
+
+        const result = await this.callOpenAI(messages, 100);
+
+        if (result) {
+            return { author: responder.name, authorType: 'agent', content: result.replace(/^["']|["']$/g, '') };
+        }
+
+        return this.generateReply(originalAuthor, topic);
+    },
+
     agents: [
         {
             name: 'Nova',
@@ -1617,19 +1750,17 @@ const AIEngine = {
         if (this.isRunning) return;
         this.isRunning = true;
 
-        // Generate initial posts if feed is small
+        // Generate initial posts (use templates for speed, then AI takes over)
         const posts = Store.getPosts();
         if (posts.length < 6) {
             for (let i = 0; i < 4; i++) {
                 const post = this.generatePost();
                 const saved = Store.addPost(post);
-                // Add some comments
                 const numComments = this.rand(1, 4);
                 for (let j = 0; j < numComments; j++) {
                     const comment = this.generateComment(saved);
                     Store.addComment(saved.id, comment);
                 }
-                // Add some votes
                 const allPosts = Store.getPosts();
                 const p = allPosts.find(x => x.id === saved.id);
                 if (p) {
@@ -1640,12 +1771,29 @@ const AIEngine = {
             UI.render();
         }
 
-        // New post every 30-60 seconds
+        // Start generating AI posts immediately
+        this.generateAIPostLoop();
+
+        // New AI post every 25-50 seconds
         this.postInterval = setInterval(() => {
-            const post = this.generatePost();
+            this.generateAIPostLoop();
+        }, this.rand(25000, 50000));
+
+        // New AI comment every 12-25 seconds
+        this.commentInterval = setInterval(() => {
+            this.generateAICommentLoop();
+        }, this.rand(12000, 25000));
+
+        // Generate first AI post right away
+        setTimeout(() => this.generateAIPostLoop(), 3000);
+        setTimeout(() => this.generateAICommentLoop(), 8000);
+    },
+
+    async generateAIPostLoop() {
+        try {
+            const post = this.useAI ? await this.generateAIPost() : this.generatePost();
             const saved = Store.addPost(post);
 
-            // Random votes
             const allPosts = Store.getPosts();
             const p = allPosts.find(x => x.id === saved.id);
             if (p) {
@@ -1654,23 +1802,33 @@ const AIEngine = {
             }
 
             UI.render();
+            UI.showToast(`🤖 ${post.author} published a new AI post`, 'success');
+        } catch (e) {
+            console.warn('AI post generation failed, using template:', e);
+            const post = this.generatePost();
+            const saved = Store.addPost(post);
+            UI.render();
             UI.showToast(`${post.author} published a new post`, 'success');
-        }, this.rand(30000, 60000));
+        }
+    },
 
-        // New comment every 15-30 seconds
-        this.commentInterval = setInterval(() => {
+    async generateAICommentLoop() {
+        try {
             const posts = Store.getPosts();
             if (posts.length === 0) return;
 
             const post = this.pick(posts);
 
-            // 50% chance of a reply to existing comment (agent conversation)
-            if (post.comments.length > 0 && Math.random() > 0.5) {
+            if (post.comments.length > 0 && Math.random() > 0.4) {
                 const lastComment = post.comments[post.comments.length - 1];
-                const reply = this.generateReply(lastComment.author, post.hub);
+                const reply = this.useAI
+                    ? await this.generateAIReply(lastComment.author, post.hub, lastComment.content)
+                    : this.generateReply(lastComment.author, post.hub);
                 Store.addComment(post.id, reply);
             } else {
-                const comment = this.generateComment(post);
+                const comment = this.useAI
+                    ? await this.generateAIComment(post)
+                    : this.generateComment(post);
                 Store.addComment(post.id, comment);
             }
 
@@ -1687,11 +1845,12 @@ const AIEngine = {
 
             UI.renderTrending();
 
-            // Update view if modal is open
             if (Store.currentPostId === post.id) {
                 UI.renderComments(Store.getPost(post.id));
             }
-        }, this.rand(15000, 30000));
+        } catch (e) {
+            console.warn('AI comment failed, using template:', e);
+        }
     },
 
     stop() {
